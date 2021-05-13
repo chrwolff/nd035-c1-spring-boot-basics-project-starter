@@ -12,7 +12,7 @@
 <div class="container">
 	<div id="logoutDiv">
 		<form action="#" th:action="@{/logout}" method="POST">
-			<button type="submit" class="btn btn-secondary float-right">Logout</button>
+			<button id="logoutBtn" type="submit" class="btn btn-secondary float-right">Logout</button>
 		</form>
 	</div>
 	<div id="contentDiv" style="clear: right;">
@@ -35,7 +35,8 @@
 								<label for="fileUpload">Upload a New File:</label>
 							</div>
 							<div class="col-sm-6">
-								<input type="file" class="form-control-file" id="fileUpload" name="fileUpload">
+								<input type="file" onchange="checkFileSize()" class="form-control-file" id="fileUpload"
+											 name="fileUpload">
 							</div>
 							<div class="col-sm-4">
 								<button type="submit" class="btn btn-dark">Upload</button>
@@ -281,6 +282,19 @@
     $('#credential-password').val(password);
     $('#credentialModal').modal('show');
   }
+
+  function checkFileSize() {
+    const element = document.getElementById('fileUpload');
+    // size in byte
+    const fileSize = element.files[0].size;
+    if (fileSize > 1048576) {
+      alert('File size must not exceed 1MB');
+      element.value = '';
+    } else if (fileSize === 0) {
+      alert('File must not be empty');
+      element.value = '';
+    }
+  };
 </script>
 </body>
 </html>

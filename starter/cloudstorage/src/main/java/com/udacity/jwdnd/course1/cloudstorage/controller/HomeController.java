@@ -63,6 +63,8 @@ public class HomeController {
         String fileName = file.getOriginalFilename();
         if (fileName == null || fileName.isEmpty()) {
             model.addAttribute(MODEL_ATTRIBUTE_ERROR_MESSAGE, "Please select a file for upload!");
+        } else if (file.getSize() == 0) {
+            model.addAttribute(MODEL_ATTRIBUTE_ERROR_MESSAGE, "The file size must be greater than zero!");
         } else if (this.fileService.filenameExists(userId, fileName)) {
             model.addAttribute(MODEL_ATTRIBUTE_ERROR_MESSAGE, "A file with the given filename already exists!");
         } else {
