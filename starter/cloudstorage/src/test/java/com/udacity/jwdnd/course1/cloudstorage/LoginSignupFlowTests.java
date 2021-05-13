@@ -96,6 +96,28 @@ class LoginSignupFlowTests {
     }
 
     @Test
+    public void noAccessAfterLogout() {
+        WebDriverWait wait = new WebDriverWait(driver, 2);
+
+        //signup
+        this.signup(USERNAME, PASSWORD);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("signupSuccessDiv")));
+        assertTrue(driver.findElement(By.id("signupSuccessDiv")).isDisplayed());
+
+        //login
+        TestHelper.login(driver, this.port, USERNAME, PASSWORD);
+        assertEquals("Home", driver.getTitle());
+
+        //logout
+        driver.findElement(By.id("logoutBtn")).click();
+        driver.get("http://localhost:" + this.port + "/");
+        assertEquals("Login", driver.getTitle());
+
+        //assert that user exists on db
+        assertNotEquals(-1, this.userService.getUserId(USERNAME));
+    }
+
+    @Test
     public void signupAndLoginFails() {
         WebDriverWait wait = new WebDriverWait(driver, 2);
 
@@ -120,7 +142,8 @@ class LoginSignupFlowTests {
 
         //signup
         this.signup(USERNAME, PASSWORD);
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("loginLink")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("signupSuccessDiv")));
+        assertTrue(driver.findElement(By.id("signupSuccessDiv")).isDisplayed());
 
         //signup again
         this.signup(USERNAME, PASSWORD);

@@ -5,6 +5,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.model.UserMapper;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -18,6 +19,11 @@ public class UserService {
                           UserMapper userMapper) {
         this.hashService = hashService;
         this.userMapper = userMapper;
+    }
+
+    @PostConstruct
+    private void postConstruct() {
+        this.createUser(new UserPayload("admin", "admin", "", ""));
     }
 
     public int createUser(UserPayload userPayload) {
